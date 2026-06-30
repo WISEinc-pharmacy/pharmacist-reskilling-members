@@ -1,0 +1,46 @@
+[
+  {
+    "id": "sample-001",
+    "title": "爆速リスキリング動画 はじめに",
+    "category": "基礎講義",
+    "type": "video",
+    "url": "https://www.youtube.com/@phama_cam",
+    "note": "会員向け動画の公開準備用サンプルです。",
+    "published": true,
+    "publishedAt": "2026-06-30",
+    "order": 1
+  },
+  {
+    "id": "sample-002",
+    "title": "処方提案の考え方",
+    "category": "処方提案",
+    "type": "video",
+    "url": "https://www.youtube.com/@phama_cam",
+    "note": "疑義照会と処方提案の基本整理。",
+    "published": true,
+    "publishedAt": "2026-06-30",
+    "order": 2
+  },
+  {
+    "id": "sample-003",
+    "title": "在宅医療で見るべきポイント",
+    "category": "在宅医療",
+    "type": "video",
+    "url": "https://www.youtube.com/@phama_cam",
+    "note": "施設・訪問の現場で確認する観点。",
+    "published": true,
+    "publishedAt": "2026-06-30",
+    "order": 3
+  },
+  {
+    "id": "sample-004",
+    "title": "健康サポート薬局の実践",
+    "category": "健康サポート",
+    "type": "video",
+    "url": "https://www.youtube.com/@phama_cam",
+    "note": "栄養・OTC・検査値をつなぐ導入講義。",
+    "published": true,
+    "publishedAt": "2026-06-30",
+    "order": 4
+  }
+]

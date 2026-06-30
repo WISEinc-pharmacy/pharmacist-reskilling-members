@@ -1,0 +1,69 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null && request.auth.token.email is string;
+    }
+
+    function email() {
+      return request.auth.token.email.lower();
+    }
+
+    function isDirector() {
+      return signedIn() && email() == "director@wise-jmco.com";
+    }
+
+    function userDoc() {
+      return /databases/$(database)/documents/users/$(email());
+    }
+
+    function isActiveMember() {
+      return signedIn()
+        && exists(userDoc())
+        && get(userDoc()).data.status == "active"
+        && get(userDoc()).data.role in ["admin", "member"];
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(userDoc())
+        && get(userDoc()).data.status == "active"
+        && get(userDoc()).data.role == "admin";
+    }
+
+    function validUserPayload() {
+      return request.resource.data.email is string
+        && request.resource.data.email == request.resource.id
+        && request.resource.data.role in ["admin", "member"]
+        && request.resource.data.status in ["active", "inactive"];
+    }
+
+    function validContentPayload() {
+      return request.resource.data.title is string
+        && request.resource.data.category is string
+        && request.resource.data.type in ["video", "article", "document", "event", "link"]
+        && request.resource.data.published is bool;
+    }
+
+    match /users/{userEmail} {
+      allow read: if isAdmin() || (signedIn() && email() == userEmail);
+      allow create: if (isAdmin() && validUserPayload())
+        || (isDirector()
+          && userEmail == "director@wise-jmco.com"
+          && request.resource.data.role == "admin"
+          && request.resource.data.status == "active"
+          && validUserPayload());
+      allow update: if isAdmin()
+        && userEmail != email()
+        && validUserPayload();
+      allow delete: if isAdmin() && userEmail != email();
+    }
+
+    match /contents/{contentId} {
+      allow read: if isAdmin() || (isActiveMember() && resource.data.published == true);
+      allow create, update: if isAdmin() && validContentPayload();
+      allow delete: if isAdmin();
+    }
+  }
+}
