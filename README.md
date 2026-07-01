@@ -1,6 +1,6 @@
 # Pharmacist Reskilling Members
 
-Member portal for the reskilling salon. The static build is safe to publish on GitHub Pages and runs in preview mode until Firebase config is added.
+Member portal for the reskilling salon. GitHub Pages hosts only the shell; member-only video URLs must be served from Firestore after Firebase Auth.
 
 ## Files
 
@@ -9,10 +9,10 @@ Member portal for the reskilling salon. The static build is safe to publish on G
 - admin.html: member/content admin shell
 - assets/app.js: Firebase auth + Firestore integration with preview fallback
 - assets/firebase-config.js: public Firebase web config placeholder
-- data/contents.json: public video list generated from the source channel
+- data/contents.json: public fallback data. Keep this empty or non-sensitive.
 - firestore.rules: member/admin Firestore access rules
 - scripts/sync_sheet_to_firestore.mjs: legacy sheet-to-Firestore sync
-- scripts/sync_youtube_to_json.mjs: preferred YouTube channel-to-JSON sync
+- scripts/sync_youtube_to_json.mjs: YouTube channel-to-local JSON sync for Firestore import
 - data/youtube-overrides.json: optional category/title/note overrides by videoId
 
 ## Firebase switch-over
@@ -22,7 +22,8 @@ Member portal for the reskilling salon. The static build is safe to publish on G
 3. Fill assets/firebase-config.js with the Firebase web config.
 4. Deploy firestore.rules.
 5. Sign in first with director@wise-jmco.com to bootstrap the admin user.
-6. Run npm run sync:sheet after credentials/token/service account files are prepared locally.
+6. Import member users with npm run import:members.
+7. Generate YouTube contents to a local ignored JSON and import with npm run import:contents.
 
 Do not commit .env, credentials.json, token.json, or serviceAccountKey.json.
 
@@ -43,14 +44,16 @@ npm run auth:youtube
 # open the URL, then rerun with YOUTUBE_AUTH_CODE=<code>
 ```
 
-Local run:
+Local run for Firestore import:
 
 ```bash
-npm run sync:youtube
+YOUTUBE_CONTENTS_OUTPUT=data/contents-private.local.json npm run sync:youtube
+RESKILLING_CONTENTS_JSON=data/contents-private.local.json npm run import:contents -- --dry-run
+RESKILLING_CONTENTS_JSON=data/contents-private.local.json npm run import:contents
 npm run verify
 ```
 
-The GitHub Actions workflow runs daily at 17:00 UTC, which is 02:00 JST.
+The GitHub Actions workflow is prepared for daily 17:00 UTC / 02:00 JST sync, but it must not publish private YouTube URLs into public JSON. Use Firestore import for member-only delivery.
 
 OAuth files must never be committed. Use GitHub Secrets for Actions and local ignored files for manual runs.
 
