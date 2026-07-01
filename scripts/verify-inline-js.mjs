@@ -9,8 +9,10 @@ for (const file of files) {
   const scripts = [...html.matchAll(/<script>(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
   for (const script of scripts) new vm.Script(script, { filename: file + ':inline-script' });
 }
-const data = fs.readFileSync('data/contents.json', 'utf8');
-for (const required of ['\u7206\u901f\u30ea\u30b9\u30ad\u30ea\u30f3\u30b0\u52d5\u753b', '\u4f1a\u54e1', '\u51e6\u65b9\u63d0\u6848']) {
-  if (!data.includes(required)) throw new Error('Missing required data text: ' + required);
-}
-console.log('inline JavaScript verified');
+const contents = JSON.parse(fs.readFileSync('data/contents.json', 'utf8'));
+if (!Array.isArray(contents) || contents.length < 1) throw new Error('data/contents.json has no contents');
+const bad = contents.filter((item) => !item.title || !/^https?:\/\/(youtu\.be|www\.youtube\.com|youtube\.com)\//i.test(item.url || ''));
+if (bad.length) throw new Error('invalid content urls: ' + bad.map((item) => item.id || item.title).join(', '));
+const channelOnly = contents.filter((item) => String(item.url || '').includes('@phama_cam'));
+if (channelOnly.length) throw new Error('channel placeholder urls remain: ' + channelOnly.length);
+console.log('inline JavaScript and content data verified');
