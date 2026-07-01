@@ -4,12 +4,13 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "check:js": "node --check assets/app.js && node --check scripts/verify-inline-js.mjs && node --check scripts/sync_sheet_to_firestore.mjs && node --check scripts/sync_youtube_to_json.mjs && node --check scripts/init_youtube_oauth.mjs && node --check scripts/import_members_to_firestore.mjs",
+        "check:js": "node --check assets/app.js && node --check scripts/verify-inline-js.mjs && node --check scripts/sync_sheet_to_firestore.mjs && node --check scripts/sync_youtube_to_json.mjs && node --check scripts/init_youtube_oauth.mjs && node --check scripts/import_members_to_firestore.mjs && node --check scripts/import_contents_to_firestore.mjs",
         "verify": "node scripts/verify-inline-js.mjs",
         "sync:sheet": "node scripts/sync_sheet_to_firestore.mjs",
         "sync:youtube": "node scripts/sync_youtube_to_json.mjs",
         "auth:youtube": "node scripts/init_youtube_oauth.mjs",
-        "import:members": "node scripts/import_members_to_firestore.mjs"
+        "import:members": "node scripts/import_members_to_firestore.mjs",
+        "import:contents": "node scripts/import_contents_to_firestore.mjs"
     },
     "dependencies": {
         "dotenv": "^17.3.1",

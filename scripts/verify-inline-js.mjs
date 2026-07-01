@@ -10,7 +10,7 @@ for (const file of files) {
   for (const script of scripts) new vm.Script(script, { filename: file + ':inline-script' });
 }
 const contents = JSON.parse(fs.readFileSync('data/contents.json', 'utf8'));
-if (!Array.isArray(contents) || contents.length < 1) throw new Error('data/contents.json has no contents');
+if (!Array.isArray(contents)) throw new Error('data/contents.json must be an array');
 const bad = contents.filter((item) => !item.title || !/^https?:\/\/(youtu\.be|www\.youtube\.com|youtube\.com)\//i.test(item.url || ''));
 if (bad.length) throw new Error('invalid content urls: ' + bad.map((item) => item.id || item.title).join(', '));
 const channelOnly = contents.filter((item) => String(item.url || '').includes('@phama_cam'));
