@@ -28,7 +28,7 @@ Do not commit .env, credentials.json, token.json, or serviceAccountKey.json.
 
 ## YouTube source-of-truth sync
 
-The dedicated YouTube channel is the source of truth for the member video list. Spreadsheet entry is not required for ordinary updates.
+The dedicated YouTube channel https://www.youtube.com/@reskilling_pharmacist is the source of truth for the member video list. Spreadsheet entry is not required for ordinary updates.
 
 Required local files or GitHub Secrets:
 
@@ -54,6 +54,19 @@ The GitHub Actions workflow runs daily at 17:00 UTC, which is 02:00 JST.
 
 OAuth files must never be committed. Use GitHub Secrets for Actions and local ignored files for manual runs.
 
+
+## Member access import
+
+Member access is controlled by Firestore `users/{email}` documents. No invitation email is required. Members sign in with the Google account that matches their registered email address.
+
+Keep roster CSV files outside this public repository. Import locally with:
+
+```bash
+RESKILLING_MEMBERS_CSV=C:/path/to/members.csv npm run import:members -- --dry-run
+RESKILLING_MEMBERS_CSV=C:/path/to/members.csv npm run import:members
+```
+
+The importer writes `role: member` and `status: active` by default. It supports CSVs where the first row is internal field IDs and the second row contains labels such as `メールアドレス` and `システム表示名`.
 ## GitHub Actions note
 
 The workflow template is stored at docs/github-actions/sync-youtube.yml.template because the current GitHub token cannot push files under .github/workflows without the workflow scope. After a token with workflow scope is available, copy it to .github/workflows/sync-youtube.yml and push.
