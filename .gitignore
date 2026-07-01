@@ -15,3 +15,6 @@ firestore-debug.log
 
 data/*private*.json
 data/*local*.json
+
+data/*local*.csv
+data/*private*.csv

@@ -92,8 +92,8 @@ function rowsToMembers(rows) {
     members.push({
       email,
       name,
-      role: ROLE,
-      status: STATUS,
+      role: String(pick(row, index, ['role']) || ROLE).trim() || ROLE,
+      status: String(pick(row, index, ['status']) || STATUS).trim() || STATUS,
       lineUserId,
       joinedAt,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
@@ -109,7 +109,8 @@ async function main() {
   const members = rowsToMembers(rows);
   if (!members.length) throw new Error('No members with email addresses were found.');
   if (DRY_RUN) {
-    console.log(JSON.stringify({ dryRun: true, csv: resolved, count: members.length, firstEmails: members.slice(0, 5).map((member) => member.email) }, null, 2));
+    const roles = members.reduce((acc, member) => ({ ...acc, [member.role]: (acc[member.role] || 0) + 1 }), {});
+    console.log(JSON.stringify({ dryRun: true, csv: resolved, count: members.length, roles, firstEmails: members.slice(0, 5).map((member) => member.email) }, null, 2));
     return;
   }
   const db = initFirestore();
