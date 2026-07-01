@@ -1,0 +1,44 @@
+name: Sync YouTube Videos
+
+on:
+  schedule:
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - name: Write OAuth files
+        env:
+          GOOGLE_OAUTH_CLIENT_JSON: ${{ secrets.GOOGLE_OAUTH_CLIENT_JSON }}
+          YOUTUBE_OAUTH_TOKEN_JSON: ${{ secrets.YOUTUBE_OAUTH_TOKEN_JSON }}
+        run: |
+          test -n "$GOOGLE_OAUTH_CLIENT_JSON"
+          test -n "$YOUTUBE_OAUTH_TOKEN_JSON"
+          printf '%s' "$GOOGLE_OAUTH_CLIENT_JSON" > credentials.json
+          printf '%s' "$YOUTUBE_OAUTH_TOKEN_JSON" > token.json
+      - name: Sync YouTube uploads
+        env:
+          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+        run: npm run sync:youtube
+      - run: npm run verify
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/contents.json; then
+            echo "No video list changes"
+            exit 0
+          fi
+          git add data/contents.json
+          git commit -m "Sync YouTube video list"
+          git push

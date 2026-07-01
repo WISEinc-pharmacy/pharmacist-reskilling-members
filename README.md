@@ -9,9 +9,11 @@ Member portal for the reskilling salon. The static build is safe to publish on G
 - admin.html: member/content admin shell
 - assets/app.js: Firebase auth + Firestore integration with preview fallback
 - assets/firebase-config.js: public Firebase web config placeholder
-- data/contents.json: public preview data only
+- data/contents.json: public video list generated from the source channel
 - firestore.rules: member/admin Firestore access rules
-- scripts/sync_sheet_to_firestore.mjs: sync video sheet rows to Firestore contents
+- scripts/sync_sheet_to_firestore.mjs: legacy sheet-to-Firestore sync
+- scripts/sync_youtube_to_json.mjs: preferred YouTube channel-to-JSON sync
+- data/youtube-overrides.json: optional category/title/note overrides by videoId
 
 ## Firebase switch-over
 
@@ -23,3 +25,35 @@ Member portal for the reskilling salon. The static build is safe to publish on G
 6. Run npm run sync:sheet after credentials/token/service account files are prepared locally.
 
 Do not commit .env, credentials.json, token.json, or serviceAccountKey.json.
+
+## YouTube source-of-truth sync
+
+The dedicated YouTube channel is the source of truth for the member video list. Spreadsheet entry is not required for ordinary updates.
+
+Required local files or GitHub Secrets:
+
+- GOOGLE_OAUTH_CLIENT_JSON: OAuth client JSON for GitHub Actions
+- YOUTUBE_OAUTH_TOKEN_JSON: OAuth token JSON with youtube.readonly scope for GitHub Actions
+- YOUTUBE_CHANNEL_ID: optional, but recommended when the account owns multiple channels
+
+One-time local OAuth setup:
+
+```bash
+npm run auth:youtube
+# open the URL, then rerun with YOUTUBE_AUTH_CODE=<code>
+```
+
+Local run:
+
+```bash
+npm run sync:youtube
+npm run verify
+```
+
+The GitHub Actions workflow runs daily at 17:00 UTC, which is 02:00 JST.
+
+OAuth files must never be committed. Use GitHub Secrets for Actions and local ignored files for manual runs.
+
+## GitHub Actions note
+
+The workflow template is stored at docs/github-actions/sync-youtube.yml.template because the current GitHub token cannot push files under .github/workflows without the workflow scope. After a token with workflow scope is available, copy it to .github/workflows/sync-youtube.yml and push.
