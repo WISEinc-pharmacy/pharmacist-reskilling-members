@@ -22,7 +22,14 @@ service cloud.firestore {
       return signedIn()
         && exists(userDoc())
         && get(userDoc()).data.status == "active"
-        && get(userDoc()).data.role in ["admin", "member"];
+        && get(userDoc()).data.role in ["admin", "editor", "member"];
+    }
+
+    function isEditor() {
+      return signedIn()
+        && exists(userDoc())
+        && get(userDoc()).data.status == "active"
+        && get(userDoc()).data.role in ["admin", "editor"];
     }
 
     function isAdmin() {
@@ -35,7 +42,7 @@ service cloud.firestore {
     function validUserPayload() {
       return request.resource.data.email is string
         && request.resource.data.email == request.resource.id
-        && request.resource.data.role in ["admin", "member"]
+        && request.resource.data.role in ["admin", "editor", "member"]
         && request.resource.data.status in ["active", "inactive"];
     }
 
@@ -61,8 +68,8 @@ service cloud.firestore {
     }
 
     match /contents/{contentId} {
-      allow read: if isAdmin() || (isActiveMember() && resource.data.published == true);
-      allow create, update: if isAdmin() && validContentPayload();
+      allow read: if isEditor() || (isActiveMember() && resource.data.published == true);
+      allow create, update: if isEditor() && validContentPayload();
       allow delete: if isAdmin();
     }
   }
