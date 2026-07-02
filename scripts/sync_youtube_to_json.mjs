@@ -5,6 +5,7 @@ import { google } from 'googleapis';
 const OUTPUT_PATH = process.env.YOUTUBE_CONTENTS_OUTPUT || 'data/contents.json';
 const OVERRIDES_PATH = process.env.YOUTUBE_OVERRIDES_PATH || 'data/youtube-overrides.json';
 const CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || '';
+const CHANNEL_HANDLE = (process.env.YOUTUBE_CHANNEL_HANDLE || '').replace(/^@/, '');
 const UPLOADS_PLAYLIST_ID = process.env.YOUTUBE_UPLOADS_PLAYLIST_ID || '';
 const CREDENTIALS_PATH = process.env.YOUTUBE_OAUTH_CREDENTIALS || process.env.GOOGLE_OAUTH_CREDENTIALS || './credentials.json';
 const TOKEN_PATH = process.env.YOUTUBE_OAUTH_TOKEN || process.env.GOOGLE_OAUTH_TOKEN || './token.json';
@@ -29,6 +30,7 @@ async function getUploadsPlaylistId(youtube) {
   if (UPLOADS_PLAYLIST_ID) return UPLOADS_PLAYLIST_ID;
   const params = { part: ['snippet', 'contentDetails'], maxResults: 1 };
   if (CHANNEL_ID) params.id = [CHANNEL_ID];
+  else if (CHANNEL_HANDLE) params.forHandle = CHANNEL_HANDLE;
   else params.mine = true;
   const res = await youtube.channels.list(params);
   const channel = res.data.items?.[0];
