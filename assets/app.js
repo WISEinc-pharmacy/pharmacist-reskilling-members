@@ -18,7 +18,7 @@
   function isAdmin() { return state.profile && state.profile.role === "admin"; }
   function isEditor() { return state.profile && (state.profile.role === "admin" || state.profile.role === "editor"); }
   function isViewerRole() { return state.profile && state.profile.role === "viewer"; }
-  function youtubeUrl(item) { return item.url || "https://www.youtube.com/@phama_cam"; }
+  function youtubeUrl(item) { var u = String((item && item.url) || ""); return /^https?:\/\//i.test(u) ? u : "https://www.youtube.com/@phama_cam"; }
   function isYoutube(url) { return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url || ""); }
   function setChrome() { if (byId("userName")) byId("userName").textContent = (state.profile && state.profile.name) || (state.user && state.user.displayName) || (state.user && state.user.email) || "Preview"; if (byId("roleBadge")) byId("roleBadge").textContent = state.preview ? "preview" : ((state.profile && state.profile.role) || "member"); if (byId("adminLink")) byId("adminLink").classList.toggle("hidden", !(isEditor() || isViewerRole())); if (byId("adminCta")) byId("adminCta").classList.toggle("hidden", !(isEditor() || isViewerRole())); if (byId("loginBtn") && !state.firebaseReady) byId("loginBtn").textContent = TXT.preview; }
   function toast(message) { var mount = byId("toastMount"); if (!mount) return; var el = document.createElement("div"); el.className = "toast"; el.textContent = message; mount.appendChild(el); window.setTimeout(function () { el.remove(); }, 3200); }
