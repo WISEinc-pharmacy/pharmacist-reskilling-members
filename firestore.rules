@@ -39,10 +39,18 @@ service cloud.firestore {
         && get(userDoc()).data.role == "admin";
     }
 
+    // viewer = 外部パートナー向け名簿閲覧専用（member_directoryのみ・contents/users本体は読めない）
+    function isDirectoryViewer() {
+      return signedIn()
+        && exists(userDoc())
+        && get(userDoc()).data.status == "active"
+        && get(userDoc()).data.role in ["admin", "viewer"];
+    }
+
     function validUserPayload() {
       return request.resource.data.email is string
         && request.resource.data.email == request.resource.id
-        && request.resource.data.role in ["admin", "editor", "member"]
+        && request.resource.data.role in ["admin", "editor", "member", "viewer"]
         && request.resource.data.status in ["active", "inactive"];
     }
 
@@ -71,6 +79,12 @@ service cloud.firestore {
       allow read: if isEditor() || (isActiveMember() && resource.data.published == true);
       allow create, update: if isEditor() && validContentPayload();
       allow delete: if isAdmin();
+    }
+
+    // 現役会員の氏名+メールのみ（同期スクリプトが再構築・クライアント書込不可）
+    match /member_directory/{entryId} {
+      allow read: if isDirectoryViewer();
+      allow write: if false;
     }
   }
 }

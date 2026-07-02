@@ -6,7 +6,7 @@ const SA_PATH = 'C:/Users/WISE-Yamauchi/Downloads/pharmacist-reskilling-members-
 
 const auth = new GoogleAuth({ keyFile: SA_PATH, scopes: ['https://www.googleapis.com/auth/cloud-platform'] });
 const client = await auth.getClient();
-const source = readFileSync(new URL('./firestore.rules', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../firestore.rules', import.meta.url), 'utf8');
 
 const ruleset = await client.request({
   url: `https://firebaserules.googleapis.com/v1/projects/${PROJECT}/rulesets`,

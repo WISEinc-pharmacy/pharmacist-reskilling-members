@@ -57,13 +57,17 @@
           <div class="form-grid">
             <label><span>&#12513;&#12540;&#12523;</span><input id="memberEmail" type="email"></label>
             <label><span>&#27663;&#21517;</span><input id="memberName" type="text"></label>
-            <label><span>&#27177;&#38480;</span><select id="memberRole"><option value="member">member</option><option value="editor">editor</option><option value="admin">admin</option></select></label>
+            <label><span>&#27177;&#38480;</span><select id="memberRole"><option value="member">member</option><option value="editor">editor</option><option value="viewer">viewer</option><option value="admin">admin</option></select></label>
             <label><span>&#29366;&#24907;</span><select id="memberStatus"><option value="active">active</option><option value="inactive">inactive</option></select></label>
             <button id="saveMemberBtn" class="btn primary">&#20250;&#21729;&#12434;&#20445;&#23384;</button>
           </div>
           <div id="memberTable" class="table-wrap"></div>
         </section>
-        <section class="panel">
+        <section id="directoryPanel" class="panel hidden">
+          <div class="panel-head"><div><h2>&#20849;&#26377;&#21517;&#31782;</h2><p class="muted">&#29694;&#24441;&#12469;&#12525;&#12531;&#20250;&#21729;&#12398;&#27663;&#21517;&#12392;&#12513;&#12540;&#12523;&#12450;&#12489;&#12524;&#12473;&#12398;&#12415;&#34920;&#31034;&#12375;&#12414;&#12377;&#12290;</p></div><div><span id="directoryCount" class="badge"></span> <button id="csvDlBtn" class="btn secondary small">CSV&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;</button></div></div>
+          <div id="directoryTable" class="table-wrap"></div>
+        </section>
+        <section id="contentDataPanel" class="panel">
           <div class="panel-head"><div><h2>&#21205;&#30011;&#12487;&#12540;&#12479;</h2><p class="muted">&#21516;&#26399;&#24460;&#12398;Firestore contents&#12434;&#34920;&#31034;&#12375;&#12414;&#12377;&#12290;</p></div></div>
           <div id="contentTable" class="table-wrap"></div>
         </section>
