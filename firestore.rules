@@ -86,5 +86,32 @@ service cloud.firestore {
       allow read: if isDirectoryViewer();
       allow write: if false;
     }
+
+    // === SNSダッシュボード（sns-dashboard・2026-07-03追加） ===
+    // 閲覧可: 運営スタッフ(admin/editor) または snsAccess==true が付与されたユーザー
+    function snsAllowed() {
+      return signedIn()
+        && exists(userDoc())
+        && get(userDoc()).data.status == "active"
+        && (get(userDoc()).data.role in ["admin", "editor"]
+          || get(userDoc()).data.get("snsAccess", false) == true);
+    }
+
+    // SNS集計データ（収集スクリプトがAdmin SDKで書込・クライアント書込不可）
+    match /sns_data/{docId} {
+      allow read: if snsAllowed();
+      allow write: if false;
+    }
+
+    // アクセス申請: 本人が自分のメールIDで作成→麗華経由で山内さん承認
+    match /access_requests/{requestEmail} {
+      allow read: if isAdmin() || (signedIn() && email() == requestEmail);
+      allow create: if signedIn()
+        && email() == requestEmail
+        && request.resource.data.email == requestEmail
+        && request.resource.data.status == "pending"
+        && request.resource.data.target in ["sns"];
+      allow update, delete: if isAdmin();
+    }
   }
 }
