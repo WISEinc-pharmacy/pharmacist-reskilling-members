@@ -22,3 +22,5 @@ data/*private*.csv
 # エルメ同期の会員データ（氏名・メール入り。publicリポジトリに絶対含めない）
 scripts/lme_members_*.json
 scripts/apply_lme_diff_*.mjs
+
+*.backup
