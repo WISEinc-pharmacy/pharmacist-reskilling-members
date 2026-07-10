@@ -62,6 +62,16 @@
           <div class="panel-head"><div><h2>&#26032;&#30528;&#21205;&#30011;</h2><p class="muted">&#26368;&#26032;&#12398;&#35611;&#32681;&#37682;&#30011;&#12434;&#34920;&#31034;&#12375;&#12414;&#12377;&#12290;</p></div><a class="btn secondary small" href="videos.html">&#12377;&#12409;&#12390;&#35211;&#12427;</a></div>
           <div id="latestList" class="grid"></div>
         </section>
+        <section id="cardChangePanel" class="panel hidden">
+          <div class="panel-head"><div><h2>クレジットカード変更のお問い合わせ</h2><p class="muted">登録カードを変更される場合はこちらからお申し込みください。担当者よりLINEにてカード変更URLをお送りします。</p></div></div>
+          <div class="form-grid">
+            <label><span>氏名</span><input id="cardChangeName" type="text" autocomplete="name"></label>
+            <label><span>メールアドレス（必須・エルメ登録アドレス）</span><input id="cardChangeEmail" type="email" autocomplete="email"></label>
+            <label style="grid-column:1/-1"><span>連絡メモ（任意）</span><textarea id="cardChangeNote" rows="3" style="width:100%;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--text);padding:10px 12px;font:inherit;resize:vertical"></textarea></label>
+            <div><button id="cardChangeBtn" class="btn primary">申し込む</button></div>
+          </div>
+          <p id="cardChangeMsg" aria-live="polite" style="margin-top:12px;min-height:1.4em"></p>
+        </section>
 </div>
     </main>
   </section>
