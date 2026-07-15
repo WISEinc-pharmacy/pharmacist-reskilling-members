@@ -72,6 +72,15 @@
           </div>
           <p id="cardChangeMsg" aria-live="polite" style="margin-top:12px;min-height:1.4em"></p>
         </section>
+        <section id="inquiryPanel" class="panel hidden">
+          <div class="panel-head"><div><h2>お問い合わせ</h2><p class="muted">運営への質問・要望はこちらから。返信は公式LINEまたはメールで行います。</p></div></div>
+          <p id="inquirySenderInfo" class="muted" style="font-size:13px;margin:0 0 12px"></p>
+          <div class="form-grid">
+            <label style="grid-column:1/-1"><span>お問い合わせ内容</span><textarea id="inquiryMessage" rows="5" maxlength="2000" placeholder="ご質問やご要望をご記入ください（2000字以内）" style="width:100%;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--text);padding:10px 12px;font:inherit;resize:vertical"></textarea></label>
+            <div><button id="inquiryBtn" class="btn primary">送信する</button></div>
+          </div>
+          <p id="inquiryMsg" aria-live="polite" style="margin-top:12px;min-height:1.4em"></p>
+        </section>
 </div>
     </main>
   </section>
