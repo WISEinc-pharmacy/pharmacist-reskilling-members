@@ -1,6 +1,6 @@
 window.RESKILLING_FIREBASE_CONFIG = {
   apiKey: "AIzaSyB10EkMLI2DX3hFs-9aF55wASSIrLjC0M8",
-  authDomain: "pharmacist-reskilling-members.firebaseapp.com",
+  authDomain: "pharmacist-reskilling-members.web.app",
   projectId: "pharmacist-reskilling-members",
   storageBucket: "pharmacist-reskilling-members.firebasestorage.app",
   messagingSenderId: "896005823878",

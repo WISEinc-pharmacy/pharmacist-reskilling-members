@@ -6,6 +6,16 @@
       "firestore.rules",
       "README.md",
       "scripts/**",
+      "gas/**",
+      "docs/**",
+      "data/*private*",
+      "data/*local*",
+      "data/*.csv",
+      "*token*.json",
+      "*.backup",
+      "package.json",
+      "package-lock.json",
+      ".env.example",
       "**/.*",
       "**/node_modules/**"
     ]
