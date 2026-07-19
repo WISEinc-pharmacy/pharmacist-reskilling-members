@@ -1,7 +1,14 @@
-// web.app側で開いた場合はfirebaseapp.com側へ寄せる（OAuthクライアントの登録リダイレクト先がfirebaseapp.comのみのため。同一ドメインでないとGoogleログインがredirect_uri_mismatchになる）
-if (location.hostname === "pharmacist-reskilling-members.web.app") {
-  location.replace(location.href.replace("pharmacist-reskilling-members.web.app", "pharmacist-reskilling-members.firebaseapp.com"));
-}
+// 正URLはfirebaseapp.com（OAuthクライアントの登録リダイレクト先がfirebaseapp.comのみ＝web.appはログイン不可。github.ioは別オリジン認証がスマホで遮断される）。旧URLで開いた場合は自動転送する
+(function () {
+  var CANON = "pharmacist-reskilling-members.firebaseapp.com";
+  var h = location.hostname;
+  if (h === "pharmacist-reskilling-members.web.app") {
+    location.replace(location.href.replace(h, CANON));
+  } else if (h === "wiseinc-pharmacy.github.io") {
+    var path = location.pathname.replace(/^\/pharmacist-reskilling-members\/?/, "/");
+    location.replace("https://" + CANON + path + location.search + location.hash);
+  }
+})();
 
 window.RESKILLING_FIREBASE_CONFIG = {
   apiKey: "AIzaSyB10EkMLI2DX3hFs-9aF55wASSIrLjC0M8",
