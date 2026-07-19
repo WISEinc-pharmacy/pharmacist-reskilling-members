@@ -12,8 +12,9 @@
   function byId(id) { return document.getElementById(id); }
   function firebaseConfig() { var config = window.RESKILLING_FIREBASE_CONFIG || {}; return (!config.apiKey || !config.projectId) ? null : config; }
   function hasFirebaseSdk() { return typeof window.firebase !== "undefined" && window.firebase.auth && window.firebase.firestore; } function previewAllowed() { return location.hostname === "localhost" || location.hostname === "127.0.0.1" || new URLSearchParams(location.search).get("preview") === "1"; }
-  function showLogin(message) { var login = byId("loginView"); var app = byId("appView"); var msg = byId("loginMsg"); if (login) login.classList.remove("hidden"); if (app) app.classList.add("hidden"); if (msg && message) msg.textContent = message; }
-  function showApp() { var login = byId("loginView"); var app = byId("appView"); if (login) login.classList.add("hidden"); if (app) app.classList.remove("hidden"); }
+  function hideLoading() { var loading = byId("loadingView"); if (loading) loading.classList.add("hidden"); }
+  function showLogin(message) { hideLoading(); var login = byId("loginView"); var app = byId("appView"); var msg = byId("loginMsg"); if (login) login.classList.remove("hidden"); if (app) app.classList.add("hidden"); if (msg && message) msg.textContent = message; }
+  function showApp() { hideLoading(); var login = byId("loginView"); var app = byId("appView"); if (login) login.classList.add("hidden"); if (app) app.classList.remove("hidden"); }
   function escapeHtml(value) { return String(value == null ? "" : value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
   function normalizeText(value) { return String(value || "").trim().toLowerCase(); }
   function displayDate(value) { if (!value) return "-"; if (typeof value === "string") return value.slice(0, 10); if (value.toDate) return value.toDate().toISOString().slice(0, 10); return String(value).slice(0, 10); }
